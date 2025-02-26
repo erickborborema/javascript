@@ -1,29 +1,25 @@
-//console.log("Olá, Mundo!")
+console.log("ola mundo")
 
-//para declarar variáveis
-let nome = "Juliana" //vamos preferir esse
-var nomes = "Juliana"
-
-//CTRL + ; -> comenários
+let nome = "juliana"
+var nomes = "juliana"
 console.log(nome)
 
 let idade = 24
-console.log("Minha idade é ", idade, "anos")
-//CONCATENÇÃO = juntar tetxo e valor
+console.log("minha idade é ", idade, "anos")
 
-//OPERAÇÕES MATEMÁTICAS
+
+
 let a = 3
 let b = 2
 
-let soma = a + b 
-let sub = a - b 
+let soma = a + b
+let sub = a - b
 let mult = a * b
 let div = a / b
 let resto = a % b
-
 console.log(soma)
 console.log(sub)
 console.log(mult)
 console.log(div)
 console.log(resto)
-console.log("oi")
+console.log(resto)
