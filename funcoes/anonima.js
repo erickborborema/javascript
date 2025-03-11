@@ -1,13 +1,13 @@
 let saudacao = function (nome){
     console.log ("oi", nome)
 }
-saudacao ("LAIS")
+saudacao ("Erick")
 
 // arrow function (funcao da seta)
 let cumprimento = (nome) => {
     console.log ("oi", nome)
 }
-cumprimento ("luiz")
+cumprimento ("Heitor")
 
 //funcao anonima
 let soma = function (a,b){
