@@ -1,56 +1,21 @@
 //cada pergunta tem: uma pergunta, as opções e, alternativa certa (começa no 0)
 const perguntas = [
     {
-        pergunta: "Qual é a principal função do sistema respiratório humano?",
-        opcoes: ["Bombear sangue para o corpo", "Produzir hormônios", "Trocar gases com o ambiente", "Digestionar alimentos"],
+        pergunta: "Qual o nome da nossa escola?",
+        opcoes: ["Luis Eulalio de Bueno Vidigal Filho", "Luis Eulalio", "Luis de Bueno", "Luis Eulalio de Vidigal"],
+        correta: 0
+    },
+    {
+        pergunta: "Qual o nome do nosso curso?", 
+        opcoes: ["Analise e Desenvolvimento de Sistemas", "Sistema da Informção", "Desenvolvimento de Sistemas", "Ciência da Computação"],
         correta: 2
     },
     {
-        pergunta: "Qual planeta do sistema solar é conhecido como 'planeta vermelho'?",
-        opcoes: ["Júpiter", "Vênus", "Marte", "Saturno"],
-        correta: 2
-    },
-    {
-        pergunta: "A fotossíntese é um processo realizado principalmente por:",
-        opcoes: ["Animais", "Fungos", "Plantas", "Vírus"],
-        correta: 2
-    },
-    {
-        pergunta: "Qual dessas opções representa um exemplo de energia renovável?",
-        opcoes: ["Carvão mineral", "Petróleo", "Gás natural", "Energia solar"],
-        correta: 3
-    },
-    {
-        pergunta: "A água é composta por quais elementos químicos?",
-        opcoes: ["Oxigênio e carbono", "Hidrogênio e oxigênio", "Nitrogênio e hidrogênio", "Carbono e nitrogênio"],
+        pergunta: "Em que ano foi fundada a nossa escola?",
+        opcoes: ["1999", "1942", "1985", "1970"],
         correta: 1
     },
-    {
-        pergunta: "Em qual parte da célula ocorre a respiração celular?",
-        opcoes: ["Núcleo", "Ribossomo", "Mitocôndria", "Lisossomo"],
-        correta: 2
-    },
-    {
-        pergunta: "Qual é a unidade de medida usada para expressar a força?",
-        opcoes: ["Metro", "Newton", "Watt", "Pascal"],
-        correta: 1
-    },
-    {
-        pergunta: "O que é necessário para que ocorra uma combustão?",
-        opcoes: ["Água, calor e vento", "Oxigênio, combustível e calor", "Luz, ar e metal", "Gás, terra e eletricidade"],
-        correta: 1
-    },
-    {
-        pergunta: "O que acontece com a água ao atingir 100 °C ao nível do mar?",
-        opcoes: ["Ela congela", "Ela evapora", "Ela derrete", "Ela se solidifica"],
-        correta: 1
-    },
-    {
-        pergunta: "Qual é a camada da Terra onde ocorrem os terremotos?",
-        opcoes: ["Núcleo interno", "Manto", "Crosta terrestre", "Atmosfera"],
-        correta: 2
-    },
-];
+]
 //variáveis para controlar o quiz
 let perguntaAtual = 0 //qual pergunta está sendo mostrada
 let pontuacao = 0 //quantidade de acertos

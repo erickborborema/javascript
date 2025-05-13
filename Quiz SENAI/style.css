@@ -1,17 +1,17 @@
 /* Importando a fonte Questrial do Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
 
 /* Resetando as configurações padrão do navegador */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Questrial', sans-serif;
 }
 
 /* Estilizando o corpo da página */
 body {
-    background-color: rgb(176, 255, 140);
+    background-color: rgb(219, 219, 219);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -53,7 +53,7 @@ h1 {
 
 /* Cor do número de acertos */
 #acertos {
-    color: #1eff00;
+    color: #5d56bd;
 }
 
 /* Cor do número de erros */
@@ -89,9 +89,9 @@ h1 {
 
 /* Estilo da opção selecionada */
 .opcao.selecionada {
-    background-color: #1eff00;
+    background-color: #5d56bd;
     color: white;
-    border-color: #1eff00;
+    border-color: #5f58bd;
 }
 
 /* Estilo dos botões */
@@ -131,15 +131,3 @@ button {
     margin-bottom: 1rem;
     color: #444;
 } 
-.fade {
-  opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-}
-
-.fade.mostrar {
-  opacity: 1;
-}
-
-.esconder {
-  display: none;
-}
