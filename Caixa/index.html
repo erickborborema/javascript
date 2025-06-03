@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Caixa - Papelaria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 id="nomePapelaria">LabPapel</h1>
+    </header>
+
+    <main class="container">
+        <h2>Simulador de Caixa 🧾</h2>
+
+        <label>Produto:
+            <select id="produto">
+                <option value="Caderno">📓 Caderno</option>
+                <option value="Caneta">🖊️ Caneta</option>
+                <option value="Lápis">✏️ Lápis</option>
+                <option value="Estojo">🎒 Estojo</option>
+                <option value="Mochila">👜 Mochila</option>
+            </select>
+        </label><br><br>
+
+        <label>Valor (R$):
+            <input type="number" id="valor" step="0.01">
+        </label><br><br>
+
+        <label>Quantidade:
+            <input type="number" id="quantidade" min="1">
+        </label><br><br>
+
+        <label>Valor pago (R$):
+            <input type="number" id="valorPago" step="0.01">
+        </label><br><br>
+
+        <button onclick="adicionarItem()">Adicionar à compra</button>
+        <button onclick="limparTudo()">Limpar Compra</button>
+
+        <h3>Itens:</h3>
+        <ul id="listarItens"></ul>
+
+        <h3>Total: R$ <span id="total">0.00</span></h3>
+        <h3>Troco: R$ <span id="troco">0.00</span></h3>
+        <p id="mensagemFrete" class="frete"></p>
+    </main>
+
+    <footer>
+        <p>&copy; Todos os direitos reservados a LabPapel</p>
+    </footer>
+
+    <script>
+        let total = 0;
+        let totalItens = 0;
+
+        function adicionarItem() {
+            const produto = document.getElementById("produto").value;
+            const valor = parseFloat(document.getElementById("valor").value);
+            const quantidade = parseInt(document.getElementById("quantidade").value);
+            const valorPago = parseFloat(document.getElementById("valorPago").value);
+
+            if (!produto || isNaN(valor) || isNaN(quantidade) || isNaN(valorPago)) {
+                alert("Preencha todos os campos corretamente!");
+                return;
+            }
+
+            const emojis = {
+                "Caderno": "📓",
+                "Caneta": "🖊️",
+                "Lápis": "✏️",
+                "Estojo": "🎒",
+                "Mochila": "👜"
+            };
+
+            const subtotal = valor * quantidade;
+            total += subtotal;
+            totalItens += quantidade;
+
+            const lista = document.getElementById("listarItens");
+            const item = document.createElement("li");
+            item.textContent = `${emojis[produto]} ${produto} - R$${valor.toFixed(2)} x ${quantidade} = R$${subtotal.toFixed(2)}`;
+            lista.appendChild(item);
+
+            document.getElementById("total").textContent = total.toFixed(2);
+
+            const troco = valorPago - total;
+            document.getElementById("troco").textContent = troco >= 0 ? troco.toFixed(2) : "Valor insuficiente";
+
+            if (totalItens > 5) {
+                document.getElementById("mensagemFrete").textContent = "🚚 Frete Grátis aplicado!";
+            } else {
+                document.getElementById("mensagemFrete").textContent = "";
+            }
+
+            document.getElementById("valor").value = "";
+            document.getElementById("quantidade").value = "";
+            document.getElementById("valorPago").value = "";
+        }
+
+        function limparTudo() {
+            document.getElementById("listarItens").innerHTML = "";
+            document.getElementById("total").textContent = "0.00";
+            document.getElementById("troco").textContent = "0.00";
+            document.getElementById("mensagemFrete").textContent = "";
+            total = 0;
+            totalItens = 0;
+        }
+    </script>
+</body>
+</html>
