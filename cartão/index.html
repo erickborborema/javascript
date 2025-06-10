@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Você Acorda Sem Memória</title>
+  <style>
+  
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+   body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    .historia {
+      max-width: 600px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+    }
+    .opcoes {
+     font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 500px;
+    }
+    .opcao {
+      background-color: #dadada;
+      border: 2px solid #333;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .opcao:hover {
+      background-color: #f3f3f3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="historia" id="texto">Você acorda em um quarto escuro, sem memória. O que você faz?</div>
+  <div class="opcoes" id="opcoes">
+    <div class="opcao" onclick="escolher('explorar')">🔍 Explorar o quarto</div>
+    <div class="opcao" onclick="escolher('gritar')">📢 Gritar por ajuda</div>
+  </div>
+
+  <script>
+    const cenas = {
+      explorar: {
+        texto: "Você encontra uma chave e um bilhete. O que deseja fazer?",
+        opcoes: [
+          { texto: "🔑 Usar a chave na porta", proximo: "usarChave" },
+          { texto: "📄 Ler o bilhete", proximo: "lerBilhete" }
+        ]
+      },
+      gritar: {
+        texto: "Uma voz responde: 'Fique onde está.'",
+        opcoes: [
+          { texto: "⏳ Esperar a ajuda chegar", proximo: "esperar" },
+          { texto: "🕳️ Procurar outra saída", proximo: "procurarSaida" }
+        ]
+      },
+      usarChave: {
+        texto: "A porta se abre e você vê um corredor iluminado.",
+        opcoes: [
+          { texto: "🚶‍♂️ Caminhar pelo corredor", proximo: "corredor" },
+          { texto: "🚪 Fechar a porta e se esconder", proximo: "esconder" }
+        ]
+      },
+      lerBilhete: {
+        texto: "O bilhete diz: 'Confie apenas na chave. Não fale com ninguém.'",
+        opcoes: [
+          { texto: "🔑 Usar a chave na porta", proximo: "usarChave" },
+          { texto: "🧍 Esperar no quarto", proximo: "esperar" }
+        ]
+      },
+      esperar: {
+        texto: "Alguém entra... É um estranho com uma seringa! 😨",
+        opcoes: [
+          { texto: "💉 Deixar aplicar", proximo: "fimMau" },
+          { texto: "🏃 Fugir pela janela", proximo: "fugirJanela" }
+        ]
+      },
+      procurarSaida: {
+        texto: "Você acha um alçapão sob a cama.",
+        opcoes: [
+          { texto: "🪜 Descer pelo alçapão", proximo: "alcapao" },
+          { texto: "🔙 Voltar para a porta", proximo: "usarChave" }
+        ]
+      },
+      corredor: {
+        texto: "Você escapa por uma saída de emergência. 🏃‍♀️✨",
+        opcoes: []
+      },
+      esconder: {
+        texto: "Você escuta passos se aproximando... É tarde demais! 😱",
+        opcoes: []
+      },
+      fimMau: {
+        texto: "Você perde a consciência. Nunca mais acorda. 💤💀",
+        opcoes: []
+      },
+      fugirJanela: {
+        texto: "Você se machuca na queda, mas sobrevive e escapa. 🩹🏃‍♂️",
+        opcoes: []
+      },
+      alcapao: {
+        texto: "Você encontra um laboratório e suas memórias voltam! 🧠🔬",
+        opcoes: []
+      }
+    };
+
+    function escolher(acao) {
+      const cena = cenas[acao];
+      document.getElementById("texto").innerText = cena.texto;
+
+      const opcoesDiv = document.getElementById("opcoes");
+      opcoesDiv.innerHTML = "";
+
+      if (cena.opcoes.length === 0) {
+        const fim = document.createElement("div");
+        fim.className = "opcao";
+        fim.textContent = "🔁 Recomeçar";
+        fim.onclick = () => location.reload();
+        opcoesDiv.appendChild(fim);
+        return;
+      }
+
+      cena.opcoes.forEach(op => {
+        const botao = document.createElement("div");
+        botao.className = "opcao";
+        botao.textContent = op.texto;
+        botao.onclick = () => escolher(op.proximo);
+        opcoesDiv.appendChild(botao);
+      });
+    }
+  </script>
+</body>
+</html>
