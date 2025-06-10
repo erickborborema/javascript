@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aventura na Floresta Mágica</title>
+  <style>
+    
+    
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+    *{
+        font-family: Poppins;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f8fb;
+      color: #2d3e50;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #3a7f6f;
+    }
+    .container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      margin: auto;
+    }
+    .message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .hint {
+      font-size: 1em;
+      color: #9b8f8f;
+    }
+    button {
+      background-color: #3a7f6f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 10px;
+    }
+    button:disabled {
+      background-color: #b2d8d8;
+      cursor: not-allowed;
+    }
+    input {
+      padding: 10px;
+      font-size: 1em;
+      margin-top: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .history {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #5f5f5f;
+    }
+    .history span {
+      margin-right: 10px;
+    }
+    .success {
+      color: #56d92f;
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1> Aventura na Floresta Mágica </h1>
+  <div class="container">
+    <div class="message">Você está na floresta e precisa encontrar o número mágico para abrir o portal. O espírito da floresta te dá pistas!</div>
+
+    <input type="number" id="guess" placeholder="Digite um número entre 1 e 100" min="1" max="100">
+    <button id="guessButton">Tentar</button>
+
+    <div class="hint"></div>
+    <div class="history">
+      <h4>Histórico de palpites:</h4>
+      <div id="attemptHistory"></div>
+    </div>
+
+    <div id="successMessage" class="success" style="display: none;">✨ Você acertou o número! O portal está aberto! ✨</div>
+    <button id="resetButton" style="display: none;">Reiniciar Jogo</button>
+  </div>
+
+  <script>
+    // Gerar número aleatório entre 1 e 100
+    let randomNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    let maxAttempts = 10;
+    let guessedNumbers = [];
+
+    // Referências DOM
+    const guessInput = document.getElementById('guess');
+    const guessButton = document.getElementById('guessButton');
+    const hintMessage = document.querySelector('.hint');
+    const attemptHistory = document.getElementById('attemptHistory');
+    const successMessage = document.getElementById('successMessage');
+    const resetButton = document.getElementById('resetButton');
+
+    // Função para verificar o palpite
+    function checkGuess() {
+      let userGuess = parseInt(guessInput.value);
+      if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+        alert("Por favor, insira um número válido entre 1 e 100!");
+        return;
+      }
+
+      attempts++;
+      guessedNumbers.push(userGuess);
+      attemptHistory.innerHTML = guessedNumbers.join(', ');
+
+      if (userGuess === randomNumber) {
+        successMessage.style.display = 'block';
+        guessButton.disabled = true;
+        guessInput.disabled = true;
+        resetButton.style.display = 'inline-block';
+      } else {
+        if (userGuess < randomNumber) {
+          hintMessage.innerHTML = '🦉 O número mágico é maior! Continue sua jornada!';
+        } else {
+          hintMessage.innerHTML = '🦋 O número mágico é menor! O espírito da floresta te observa!';
+        }
+
+        if (attempts >= maxAttempts) {
+          hintMessage.innerHTML = '😢 Você atingiu o número máximo de tentativas. O número mágico era ' + randomNumber + '. Tente novamente!';
+          guessButton.disabled = true;
+          guessInput.disabled = true;
+          resetButton.style.display = 'inline-block';
+        }
+      }
+
+      guessInput.value = '';  // Limpar o campo de entrada
+    }
+
+    // Função para reiniciar o jogo
+    function resetGame() {
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      guessedNumbers = [];
+      hintMessage.innerHTML = '';
+      attemptHistory.innerHTML = '';
+      successMessage.style.display = 'none';
+      guessButton.disabled = false;
+      guessInput.disabled = false;
+      resetButton.style.display = 'none';
+      guessInput.value = '';
+    }
+
+    // Eventos
+    guessButton.addEventListener('click', checkGuess);
+    resetButton.addEventListener('click', resetGame);
+
+  </script>
+</body>
+</html>
