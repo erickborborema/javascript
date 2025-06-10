@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Verificador de Hash (Senha)</title>
+<style>
+ 
+ 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+ *{
+    font-family: Poppins;
+ }
+
+ body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding: 2rem;
+  }
+  h1 {
+    margin-bottom: 1rem;
+  }
+  input[type="text"] {
+    width: 300px;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border: 2px solid #555;
+    border-radius: 5px;
+    background: #222;
+    color: #eee;
+    transition: border-color 0.3s;
+  }
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+  .status {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  .alert {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .alert.weak {
+    color: #f87171; /* red */
+  }
+  .alert.medium {
+    color: #fbbf24; /* yellow */
+  }
+  .alert.strong {
+    color: #34d399; /* green */
+  }
+</style>
+</head>
+<body>
+  <h1>Verificador de Hash (Senha)</h1>
+  <input id="hashInput" type="text" placeholder="Digite a hash/senha aqui" autocomplete="off" />
+  <div id="status" class="status"></div>
+  <div id="alerts"></div>
+
+<script>
+  const input = document.getElementById('hashInput');
+  const status = document.getElementById('status');
+  const alerts = document.getElementById('alerts');
+
+  // Critérios mínimos de segurança:
+  //  - No mínimo 8 caracteres
+  //  - Contém letras maiúsculas
+  //  - Contém letras minúsculas
+  //  - Contém números
+  //  - Contém símbolos especiais
+
+  function checkHashSecurity(hash) {
+    const alertsList = [];
+    let score = 0;
+
+    if (hash.length < 8) {
+      alertsList.push("Senha deve ter ao menos 8 caracteres.");
+    } else {
+      score++;
+    }
+    if (/[A-Z]/.test(hash)) {
+      score++;
+    } else {
+      alertsList.push("Adicionar letras maiúsculas.");
+    }
+    if (/[a-z]/.test(hash)) {
+      score++;
+    } else {
+      alertsList.push("Adicionar letras minúsculas.");
+    }
+    if (/\d/.test(hash)) {
+      score++;
+    } else {
+      alertsList.push("Adicionar números.");
+    }
+    if (/[^A-Za-z0-9]/.test(hash)) {
+      score++;
+    } else {
+      alertsList.push("Adicionar símbolos especiais.");
+    }
+
+    let strength = "Fácil";
+    if (score >= 4) strength = "Forte";
+    else if (score >= 2) strength = "Média";
+
+    return { score, strength, alertsList };
+  }
+
+  input.addEventListener('input', () => {
+    const hash = input.value;
+    if (hash.length === 0) {
+      status.textContent = "";
+      alerts.innerHTML = "";
+      input.style.borderColor = "#555";
+      return;
+    }
+
+    const { score, strength, alertsList } = checkHashSecurity(hash);
+
+    status.textContent = `Nível de segurança: ${strength}`;
+
+    // Ajusta cor do input conforme nível
+    if (strength === "Forte") {
+      input.style.borderColor = "#34d399"; // verde
+      status.className = "status alert strong";
+    } else if (strength === "Média") {
+      input.style.borderColor = "#fbbf24"; // amarelo
+      status.className = "status alert medium";
+    } else {
+      input.style.borderColor = "#f87171"; // vermelho
+      status.className = "status alert weak";
+    }
+
+    // Exibe alertas, se houver
+    if (alertsList.length > 0) {
+      alerts.innerHTML = alertsList.map(msg => `<div class="alert weak">⚠️ ${msg}</div>`).join("");
+    } else {
+      alerts.innerHTML = "";
+    }
+  });
+</script>
+</body>
+</html>
