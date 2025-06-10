@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle Financeiro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Bem-vinda, Erick!</h1>
+    <p>Seu controle financeiro pessoal</p>
+  </header>
+
+  <main>
+    <section class="resumo">
+      <div>
+        <h3>Entradas</h3>
+        <span class="valor-entradas">R$ 0.00</span>
+      </div>
+      <div>
+        <h3>Saídas</h3>
+        <span class="valor-saidas">R$ 0.00</span>
+      </div>
+      <div>
+        <h3>Total</h3>
+        <span class="valor-total">R$ 0.00</span>
+      </div>
+    </section>
+
+    <section class="formulario">
+      <input type="text" id="descricao" placeholder="Descrição" />
+      <input type="number" id="valor" placeholder="Valor" />
+      <select id="tipo">
+        <option value="Entrada">Entrada</option>
+        <option value="Saída">Saída</option>
+      </select>
+      <button id="botao-adicionar">Incluir</button>
+    </section>
+
+    <section class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
