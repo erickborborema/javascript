@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jukebox de Emoções</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    * {
+      box-sizing: border-box;
+      font-family: Poppins, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #111;
+      overflow: hidden;
+      transition: background 1.2s ease;
+      user-select: none;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 3rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    #jukebox {
+      background: rgba(0,0,0,0.4);
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+      max-width: 1000px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 36px;
+    }
+
+    button.emotion-btn {
+      background: linear-gradient(135deg, #444, #222);
+      border: none;
+      padding: 18px 32px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #eee;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: background 0.35s, transform 0.3s, box-shadow 0.35s;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button.emotion-btn:hover {
+      background: linear-gradient(135deg, #fff, #bbb);
+      color: #111;
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.4);
+    }
+
+    button#stop-btn {
+      background: #c0392b;
+      margin-top: 24px;
+      padding: 16px 48px;
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(192, 57, 43, 0.7);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    button#stop-btn:hover {
+      background: #e74c3c;
+      box-shadow: 0 10px 28px rgba(231, 76, 60, 0.85);
+    }
+
+    #music-info {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-top: 10px;
+      min-height: 2.5rem;
+      letter-spacing: 0.06em;
+    }
+
+    #visual {
+      margin-top: 35px;
+      font-size: 6rem;
+      opacity: 1;
+    }
+
+    body.alegria { background: linear-gradient(135deg, #ffde59, #f2994a); }
+    body.tristeza { background: linear-gradient(135deg, #283e51, #485563); }
+    body.aventura { background: linear-gradient(135deg, #2b5876, #4e4376); }
+    body.amor { background: linear-gradient(135deg, #f85032, #e73827); }
+    body.misterio { background: linear-gradient(135deg, #000000, #434343); }
+    body.calma { background: linear-gradient(135deg, #89f7fe, #66a6ff); }
+    body.animacao { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+    body.suspense { background: linear-gradient(135deg, #232526, #1c1c1c); }
+
+    #visual img, #visual span {
+      max-height: 150px;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="jukebox">
+    <h1>Jukebox de Emoções</h1>
+    <div class="buttons-container">
+      <button class="emotion-btn" onclick="playEmotion('alegria')">Alegria</button>
+      <button class="emotion-btn" onclick="playEmotion('tristeza')">Tristeza</button>
+      <button class="emotion-btn" onclick="playEmotion('aventura')">Aventura</button>
+      <button class="emotion-btn" onclick="playEmotion('amor')">Amor</button>
+      <button class="emotion-btn" onclick="playEmotion('misterio')">Mistério</button>
+      <button class="emotion-btn" onclick="playEmotion('calma')">Calma</button>
+      <button class="emotion-btn" onclick="playEmotion('animacao')">Animação</button>
+      <button class="emotion-btn" onclick="playEmotion('suspense')">Suspense</button>
+    </div>
+
+    <div id="music-info"></div>
+    <div id="visual"></div>
+    <button id="stop-btn" onclick="stopMusic()">Parar</button>
+  </div>
+
+  <script>
+    const musicData = {
+      alegria: {
+        song: "https://rr5---sn-bg0s7n7k.googlevideo.com/videoplayback?expire=1750209618&ei=8r9RaI-wMbWCkucP_c-5-QQ&ip=192.53.64.7&id=o-AGlB1F3g2E7-lPhist6ER1IQq2ryWMmSIvysoqd7t_QH&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLNFKvgpb072Fkd3qT-4208ZWcydXwdIW0I13maw8TF3aUAW3ie84OBkoEopIvWie0xpGTgQS82P&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=011nY9ea53_DGwbRdD--KhAQ&rqh=1&gir=yes&clen=1268060&dur=199.061&lmt=1714685494218864&keepalive=yes&lmw=1&c=TVHTML5&sefc=1&txp=4532434&n=7Z7Ytrmhcnrh4A&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRQIhAP4g8zZvtWmavNOSh_O3-4Y3hXtXonDDRf4QOOCM_n61AiBKCW91BEDu0aqb_BvhFPHxNJdBg1gfVAc3T_tsN0ZK6A%3D%3D&rm=sn-gjo-cvns7e,sn-p5qe7d7z&rrc=79,104&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24352011,24352022,24352102,24352188,24352220,24352236&req_id=c624f5c48823a3ee&rms=rdu,au&redirect_counter=2&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1750188029,&mh=xn&mip=200.212.26.114&mm=29&mn=sn-bg0s7n7k&ms=rdu&mt=1750187120&mv=m&mvi=5&pl=23&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgfl3dt8oWpw0l1nV2e7xN3RtFiP6FI6iLqgXlj8I0fOQCIF56uv7Yf0P-y7m5YCMvY2uM5kzC2gEYzAt9Fh2bu_ys", // seu link aqui
+        visual: "🎉",
+        text: "Bruno Mars - The Lazy Song"
+      },
+      tristeza: {
+        song: "https://rr4---sn-bg0e6ned.googlevideo.com/videoplayback?expire=1750210543&ei=j8NRaMyECpSI9fgPg5TiqAE&ip=154.217.197.199&id=o-ALgIbewmiSRRcavs_LyR0R553nG684146TywBeXvfukt&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&rms=au%2Cau&bui=AY1jyLOH-ab3lr8ZIhLTfgLe_YN0gO1uixtf4Zg_nlbzdr1eIZMpgtdq4zbgff_-hYVOTYIK3pfaO4aU&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=r7JrTv06ilJRptpMqtvvG2sQ&rqh=1&gir=yes&clen=1557226&dur=240.221&lmt=1728230393304195&keepalive=yes&lmw=1&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24351951,24352011,24352022,24352102,24352188,24352220,24352236,51466643&c=TVHTML5&sefc=1&txp=5532434&n=bAHep5AZ2swkwQ&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRQIhAN2S0RSzZYs3WJp_Z2C0B3dFdgpr6Ey6vGMWk4bTyPL1AiBVm0cGGH88tYMkdKxghZgxcxIIi0yaZrpMXMuFYwKLlQ%3D%3D&redirect_counter=1&rm=sn-hgned7e&rrc=104&req_id=5af6222a0440a3ee&cms_redirect=yes&ipbypass=yes&met=1750188954,&mh=lH&mip=201.63.217.82&mm=31&mn=sn-bg0e6ned&ms=au&mt=1750188569&mv=m&mvi=4&pl=21&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRgIhAKrjaNwXOdBuvB5tN0CvZXF9Wmyq_FTpA34vouGwo_1HAiEA1tMXRjciMayHfiMqhQuJDVtrBoKkqKq7GxA9K_Rw85g%3D",
+        visual: "💧",
+        text: "Tom Odell - Another Love"
+      },
+      aventura: {
+        song: "https://rr4---sn-a5msenes.googlevideo.com/videoplayback?expire=1750210190&ei=LsJRaIXXDoyG9fgPwb3X6QY&ip=96.62.130.239&id=o-AHgreWfUhG6smKyfF6WaVPAGTWoUJvU4bhcbg_RAEu6v&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&rms=au%2Cau&bui=AY1jyLPibvm1DDyJSmb8j6o3_PgGhHPAx130PSXjxwA5VqnX1PPyY7JXEoOQPsQ8dgFOjvgnrVL4ur7U&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=zDCNT9Ffr1I7-jM4tL6SepMQ&rqh=1&gir=yes&clen=1261742&dur=204.061&lmt=1716503185294344&keepalive=yes&lmw=1&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24352012,24352022,24352102,24352157,24352188,24352220,24352236,51466642&c=TVHTML5&sefc=1&txp=4532434&n=izw1WjVFyWp6Ug&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRgIhAN-_WlJsnipTVfJiIDQsHvcOvrg6EI38poDSp9EoPNIAAiEA8bvCSP21XqPSFd6LHiYkmizhPJ9ICmXtpdZAz_Er_As%3D&redirect_counter=1&rm=sn-4g5edr76&rrc=104&req_id=dae3b724a145a3ee&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1750188605,&mh=D7&mip=201.63.217.82&mm=31&mn=sn-a5msenes&ms=au&mt=1750187048&mv=D&mvi=4&pl=0&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRQIhAIFQUs_1Jh_Qi9fY1HLH0UT6AaFqkrqj9QvkK09rXSevAiAZFgHj0sf9EvlNv7Y0FJioxEP-Ud6xkAi3aG5MiCotFg%3D%3D",
+        visual: "🧭",
+        text: "Vance Joy - 'Riptide'"
+      },
+      amor: {
+        song: "https://rr5---sn-bg0s7n7d.googlevideo.com/videoplayback?expire=1750210722&ei=QsRRaOCWKZqH0u8P3tDykQU&ip=82.25.201.103&id=o-ALa0vusPbnWhYVBKQcIztjn5dxEMW9UaynDMuT0lJZ2O&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLMMknjVzPlQp7Uw2SIeZJThUhgEy4bASbLkpiFnYRnieBkx7EbWjc8UfpC5a2KEKI8kSIgFpP6Q&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=Ls6ZN8fauff63QBJLSW4lTEQ&rqh=1&gir=yes&clen=1501890&dur=236.801&lmt=1733194664962569&keepalive=yes&lmw=1&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24352011,24352022,24352102,24352188,24352220,24352236,51466698&c=TVHTML5&sefc=1&txp=5532434&n=tN41k-WLo4TGAA&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRQIhAMb8jUF0QjuLzGzr0z9_S5RGiOA413-DJxEIHsI0lTjTAiBraVEFdpnS-QB9wI3pc10ZCcYkB51joTuEKMu5_CQrUg%3D%3D&rm=sn-oxup5-3ufs7e,sn-f5fez76&rrc=79,104&req_id=e36fe1241f45a3ee&cmsv=e&rms=rdu,au&redirect_counter=2&cms_redirect=yes&ipbypass=yes&met=1750189145,&mh=K_&mip=200.212.26.114&mm=29&mn=sn-bg0s7n7d&ms=rdu&mt=1750188801&mv=m&mvi=5&pl=23&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgMIK-5gMpiHBpd1InvBkXhUFkBfo3UFFNIPmY2r7WP_sCIHfvEvrUSW4onYu-DcsKvd5ogfKiyZ49hwe8zbr1NxX4",
+        visual: "❤️",
+        text: "Justin Bieber - Love Yourself"
+      },
+      misterio: {
+        song: "https://rr4---sn-a5msenes.googlevideo.com/videoplayback?expire=1750210955&ei=K8VRaPbhLcno6dsPz8fqkQE&ip=82.24.29.13&id=o-ACKdKoHNZinlCoMHnMX8bpBuwNeYokz0CUuYQHRux0el&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&rms=au%2Cau&bui=AY1jyLPfKx_TtrWBomNfeFqAEb6KW9iuACfwJbjRLsadMGl15Q1LeRUyIYh2TwW1KAUwpFp21bYfd8hP&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=ijaQ2z0bTKtbQCKRQmDLDXIQ&rqh=1&gir=yes&clen=1022069&dur=175.021&lmt=1714467892113713&keepalive=yes&lmw=1&c=TVHTML5&sefc=1&txp=4402434&n=SOgHNAox7bYz7w&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRgIhAM4BVuIHQdS5GxTnd53yNF9CyZAk9WlPcpWL3Zr_D3e5AiEAwUjrK5lFZQJDwhXwAmyOi6GphYb7jH-h6haTeuf5K1I%3D&redirect_counter=1&rm=sn-4g5ers7l&rrc=104&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24352012,24352022,24352102,24352188,24352220,24352236&req_id=9721d858c2d2a3ee&cms_redirect=yes&cmsv=e&ipbypass=yes&met=1750189363,&mh=iJ&mip=201.63.217.82&mm=31&mn=sn-a5msenes&ms=au&mt=1750188654&mv=D&mvi=4&pl=0&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgWQ-EGzPL8QzZ77_-k-2t0ugf5rKWumw9DJmU8eVZpZcCIBUS2x0Lr44XnXwZgdTMaXIAYiQst7IWQFhykk0OCfQx",
+        visual: "🕵️‍♂️",
+        text: "Pharoahe Monch - Simon Says"
+      },
+      calma: {
+        song: "https://rr2---sn-bg0s7nls.googlevideo.com/videoplayback?expire=1750211108&ei=xMVRaLWdEfPdp-oP4OHpsAI&ip=154.217.197.209&id=o-AOHYDbUWDJgHyyh6-vhsvVfzXPe2WKAjp2EYssZNWtDS&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLP1Vtakr2POmf4O01DE4zQJgFopbsOQBAQiezFPdcvTIdwbjxjiGgzseN02B2Y-ykRiehwyz85a&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=zy1HTxdxb32jihhmArp6sW8Q&rqh=1&gir=yes&clen=1005675&dur=165.001&lmt=1697863735989945&keepalive=yes&lmw=1&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351829,24351907,24352012,24352022,24352102,24352156,24352188,24352220,24352236,51466643&c=TVHTML5&sefc=1&txp=4532434&n=6TlWbt_yjWMxkg&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRAIgBhGifVcaclz72R5j_fhQmEK5oOO_q--JfI-ODjcVilQCIHdkANK07l170N_aIvZt9-3C-31ID5-0sVo5oLjzd0nr&rm=sn-hgned7l,sn-xhcg5uxa-bg0r7z&rrc=104,79&req_id=aaf0315c2e93a3ee&ipbypass=yes&redirect_counter=2&cms_redirect=yes&cmsv=e&met=1750189514,&mh=kV&mip=200.212.26.114&mm=29&mn=sn-bg0s7nls&ms=rdu&mt=1750189278&mv=m&mvi=2&pl=23&rms=rdu,au&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRQIhAOL319vSQfV3Bi365jmUyfyG851fUlaIN3ZcF4-zK1hKAiBOEgBJxWA2iXkaTIgHnK4aRUC8D4m_4H9ky5GXOm9tLw%3D%3D",
+        visual: "🌿",
+        text: "Bob Marley - One Love"
+      },
+      animacao: {
+        song: "https://rr1---sn-bg0s7nlr.googlevideo.com/videoplayback?expire=1750211289&ei=ecZRaP2mK5vF-L4PysyoqQM&ip=82.23.94.225&id=o-AO-w741kKUIsqx3QJT8D7bbtUBSvsCNNPQHe2rIyvtjM&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLO8el32-vv3sme4fP_qt0raO0oLaBZI7mu3z2eGfqTrm_pfmNuHB-ezJw8raq17qbBVVb8GrXTU&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=3Rss1BZ0tstKra9YuQsqDo8Q&rqh=1&gir=yes&clen=1494372&dur=235.181&lmt=1735693514315033&keepalive=yes&lmw=1&c=TVHTML5&sefc=1&txp=5532434&n=-NareqbbJu9ysw&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRgIhAKPKhNTFr_RdI8iyQQm3SPFW5ySJhqFG8516cKK-ZUKpAiEAkRJdRxTbMzmCM_dcY7chcVXEtTFlTJpwuOTXDOHpICI%3D&rm=sn-gvbxgn-tt1ek7s,sn-tt1ls76&rrc=79,104&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24352011,24352022,24352102,24352154,24352157,24352188,24352220,24352236&req_id=a1eaf873d0d9a3ee&cmsv=e&rms=nxu,au&redirect_counter=2&cms_redirect=yes&ipbypass=yes&met=1750189707,&mh=wD&mip=201.63.217.82&mm=30&mn=sn-bg0s7nlr&ms=nxu&mt=1750189477&mv=m&mvi=1&pl=21&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgElU6B9Ym0hGpxKHhbVoNxaTxp4aG3LDNephDbs5-ib8CIEYAVDlXzIzsChpzG2TGFuItGNqYE4_5HX5Tn_16HVT_",
+        visual: "🎬",
+        text: "Bob Marley - Could You Be Loved"
+      },
+      suspense: {
+        song: "https://rr3---sn-bg0s7nlk.googlevideo.com/videoplayback?expire=1750211444&ei=FMdRaLyvMqvi6dsPi_vIUQ&ip=45.38.245.53&id=o-AJqB_z_ibAmfJYzGJuFqaUKT1JvbFo_xJYH1B6cWlNLI&itag=249&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLMHChSDjaLLdCeLDWrCXf6fzqKCMfQGEFiRjSlrr-fDdHduAChQv3xjH9xQNyXyzr7OvokDbz28&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=uQiEcZoEDLyBXrCEqk0nXtsQ&rqh=1&gir=yes&clen=1545987&dur=277.261&lmt=1726761856732316&keepalive=yes&lmw=1&fexp=24350590,24350737,24350827,24350961,24351173,24351316,24351318,24351495,24351528,24351759,24351907,24352012,24352022,24352102,24352188,24352220,24352236,51466643&c=TVHTML5&sefc=1&txp=5532434&n=Bcb-ctZ-HdiFLw&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRQIgSERjgM4-g0AGv1KH0IjS0iWtu0mxTtBG5zfNa9golIICIQDJXh50kVv8LZ3CTgi6mpe8kg08YpxDMCp9D7kQg0W02A%3D%3D&rm=sn-8xgn5uxa-4g5d7l,sn-8xgn5uxa-quhz7l,sn-4g5erl7e&rrc=79,79,104,80&req_id=1f710c4735a3a3ee&ipbypass=yes&redirect_counter=4&cm2rm=sn-a5myr7e&cms_redirect=yes&cmsv=e&met=1750189860,&mh=mc&mip=200.212.26.114&mm=34&mn=sn-bg0s7nlk&ms=ltu&mt=1750189252&mv=m&mvi=3&pl=23&rms=ltu,au&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgP8sEUdJMWICWQ3uZL9EzDbz7SZ1Kxfcujr69pMr6-1ECIAwiRD04bEh6djRHohcXDps6jTgRZ7pZ7LojprWaoyZA",
+        visual: "😱",
+        text: "Tense Cinematic NoCopyright Background Music"
+      }
+    };
+
+    let currentAudio = null;
+
+    function playEmotion(emotion) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      const data = musicData[emotion];
+      if (!data) return;
+
+      document.body.className = emotion;
+      document.getElementById("music-info").textContent = data.text;
+      document.getElementById("visual").innerHTML = `<span>${data.visual}</span>`;
+
+      currentAudio = new Audio(data.song);
+      currentAudio.play();
+    }
+
+    function stopMusic() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      document.getElementById("music-info").textContent = "";
+      document.getElementById("visual").innerHTML = "";
+      document.body.className = "";
+    }
+  </script>
+</body>
+</html>
