@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avatar Interativo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #fdfbfb, #ebedee);
+      color: #333;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #333;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      background: #fff;
+      border: 3px solid #ddd;
+      border-radius: 16px;
+      padding: 18px;
+      width: 160px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, border-color 0.3s;
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+      border-color: #a29bfe;
+    }
+
+    .label {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: #555;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .label span {
+      font-size: 1.5rem;
+    }
+
+    .box img {
+      width: 100px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 10px;
+    }
+
+    .controle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .controle button {
+      background: #a29bfe;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .controle button:hover {
+      background: #6c5ce7;
+    }
+
+    #avatar {
+      background: #fff;
+      border-radius: 25px;
+      padding: 30px;
+      width: 320px;
+      margin: auto;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      border: 4px dashed #ffeaa7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #avatar img {
+      width: 270px;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #avatar-corpo {
+      z-index: 0;
+    }
+
+    #baixar {
+      margin-top: 30px;
+      background: linear-gradient(to right, #00cec9, #81ecec);
+      color: white;
+      font-size: 1.2rem;
+      padding: 12px 28px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      transition: 0.3s ease;
+    }
+
+    #baixar:hover {
+      background: linear-gradient(to right, #00b894, #55efc4);
+    }
+  </style>
+</head>
+<body>
+  <h1>Monte seu Avatar 🎨</h1>
+
+  <div class="container">
+    <div class="box">
+      <div class="label"><span>💇‍♂️</span> Cabelo</div>
+      <img id="preview-cabelo" src="imagem/cabelos/cabelo1.png" alt="Cabelo" />
+      <div class="controle">
+        <button onclick="troca('cabelo', -1)">←</button>
+        <button onclick="troca('cabelo', 1)">→</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="label"><span>🙂</span> Rosto</div>
+      <img id="preview-rosto" src="imagem/rostos/rosto1.png" alt="Rosto" />
+      <div class="controle">
+        <button onclick="troca('rosto', -1)">←</button>
+        <button onclick="troca('rosto', 1)">→</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="label"><span>🧍‍♂️</span> Corpo</div>
+      <img id="preview-corpo" src="imagem/corpo/roupa1.png" alt="Corpo" />
+      <div class="controle">
+        <button onclick="troca('corpo', -1)">←</button>
+        <button onclick="troca('corpo', 1)">→</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="avatar">
+    <img src="imagem/cabelos/cabelo1.png" id="avatar-cabelo" alt="Cabelo do avatar" />
+    <img src="imagem/rostos/rosto1.png" id="avatar-rosto" alt="Rosto do avatar" />
+    <img src="imagem/corpo/roupa1.png" id="avatar-corpo" alt="Corpo do avatar" />
+  </div>
+
+  <button id="baixar" onclick="baixarAvatar()">⬇️ Baixar Avatar</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    const opcoes = {
+      cabelo: 5,
+      rosto: 5,
+      corpo: 5
+    };
+
+    const estado = {
+      cabelo: 1,
+      rosto: 1,
+      corpo: 1
+    };
+
+    function troca(parte, direcao) {
+      estado[parte] += direcao;
+      if (estado[parte] < 1) estado[parte] = opcoes[parte];
+      if (estado[parte] > opcoes[parte]) estado[parte] = 1;
+
+      const caminho = `img/${parte}/${parte}${estado[parte]}.png`;
+
+      document.getElementById(`preview-${parte}`).src = caminho;
+      document.getElementById(`avatar-${parte}`).src = caminho;
+    }
+
+    function baixarAvatar() {
+      html2canvas(document.querySelector("#avatar"), { backgroundColor: null }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "meu_avatar.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
